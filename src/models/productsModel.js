@@ -32,24 +32,28 @@ module.exports = {
   },
   updateProducts: (data, id) => {
     return new Promise((resolve, reject) => {
-      db.query(`UPDATE * FROM vehice SET ? WHERE id=${id}`, (err, res) => {
-        if (!err) {
-          const newResult = {
-            id,
-            ...data,
-          };
-          resolve(newResult);
-        } else {
-          reject(new Error(err));
+      const keys = Object.keys(data);
+      const values = Object.values(data);
+      db.query(
+        `UPDATE vehicle SET ${keys.map(
+          (key, index) => `${key} = "${values[index]}"`
+        )} WHERE id = ${id}`,
+        (err, res) => {
+          if (!err) {
+            console.log(res);
+            return resolve(res);
+          } else {
+            console.log(err);
+            reject(new Error(err));
+          }
         }
-      });
+      );
     });
   },
   deleteProducts: (id) => {
     return new Promise((resolve, reject) => {
-      db.query(`DELETE FROM vehicle WHERE id = ${id}`, (error, res) => {
-        console.log(error);
-        !error ? resolve(res) : reject(new Error(error));
+      db.query(`DELETE FROM vehicle WHERE id = ${id}`, (err, res) => {
+        !err ? resolve(res) : reject(new Error(err));
       });
     });
   },

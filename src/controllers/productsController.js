@@ -51,8 +51,8 @@ module.exports = {
         user_id,
         vehicle_name,
         vehicle_type,
-        rental_price: parseInt(rental_price),
-        qty: parseInt(qty),
+        rental_price,
+        qty,
         images,
         created_at: new Date(),
       };
@@ -70,30 +70,21 @@ module.exports = {
     }
   },
   updateProducts: async (req, res) => {
-    const { id } = req.params;
-    const {
-      user_id,
-      vehicle_name,
-      vehicle_type,
-      rental_price,
-      qty,
-      images,
-    } = req.body;
-    const data = {
-      user_id,
-      vehicle_name,
-      vehicle_type,
-      rental_price,
-      qty,
-      images,
-      updated_at: new Date(),
-    };
-    const result = await updateProducts(data, id);
-    return res.json({
-      success: true,
-      message: `SUCCESS UPDATE DATA WITH ID: ${id}`,
-      data: result,
-    });
+    try {
+      const { id } = req.params;
+      await updateProducts(req.body, id);
+      const updatedProduct = await getProductById(id);
+      return res.json({
+        success: true,
+        message: `SUCCESS UPDATE DATA WITH ID: ${id}`,
+        data: updatedProduct,
+      });
+    } catch (err) {
+      return res.json({
+        success: false,
+        message: err.message,
+      });
+    }
   },
   deleteProducts: async (req, res) => {
     try {
@@ -103,10 +94,10 @@ module.exports = {
         success: true,
         message: "SUCCESS DELETE DATA",
       });
-    } catch (error) {
+    } catch (err) {
       return res.json({
         success: false,
-        message: error,
+        message: err.message,
       });
     }
   },
