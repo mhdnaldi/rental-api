@@ -9,15 +9,14 @@ module.exports = {
     });
   },
   getAllProducts: (search, offset, limit, category) => {
-    // if (search === undefined) {
-    //   search = "";
-    // }
-    // if (category === undefined) {
-    //   category = "";
-    // }
+    let syntax = `AND vehicle_type LIKE "${category}"`;
+    if (category === "All") {
+      syntax = "";
+    }
+    console.log(category);
     return new Promise((resolve, reject) => {
       db.query(
-        `SELECT * FROM vehicle WHERE vehicle_name LIKE "%${search}%" AND vehicle_type LIKE "${category}" LIMIT ${limit} OFFSET ${offset} `,
+        `SELECT * FROM vehicle WHERE vehicle_name LIKE "%${search}%"${syntax} LIMIT ${limit} OFFSET ${offset} `,
         (err, res) => {
           !err ? resolve(res) : reject(new Error(err));
         }
