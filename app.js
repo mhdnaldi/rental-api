@@ -2,7 +2,12 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
-const navigation = require("./src/navigation");
+const cors = require("cors");
+const corsOption = {
+  origin: process.env.port,
+  optionSuccessStatus: 200,
+};
+const navigation = require("./src/navigation", cors(corsOption));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

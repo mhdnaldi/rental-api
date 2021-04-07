@@ -4,6 +4,7 @@ const {
   postProducts,
   deleteProducts,
   updateProducts,
+  getTotalCount,
 } = require("../models/productsModel");
 
 module.exports = {
@@ -18,22 +19,32 @@ module.exports = {
     } catch (err) {
       return res.json({
         success: false,
-        message: err,
+        message: err.message,
       });
     }
   },
   getAllProducts: async (req, res) => {
     try {
-      const result = await getAllProducts();
+      let { search, page, limit, category } = req.query;
+      page = parseInt(page);
+      limit = parseInt(limit);
+      let offset = limit * (page - 1);
+      const result = await getAllProducts(search, offset, limit, category);
+      const total = await getTotalCount(search);
       return res.json({
         success: true,
         message: "SUCCESS GET ALL DATA",
-        data: result,
+        data: {
+          total,
+          page,
+          limit,
+          result: result,
+        },
       });
     } catch (err) {
       return res.json({
         success: false,
-        message: err,
+        message: err.message,
       });
     }
   },
@@ -65,7 +76,7 @@ module.exports = {
     } catch (err) {
       return res.json({
         success: false,
-        message: err,
+        message: err.message,
       });
     }
   },

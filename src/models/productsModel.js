@@ -8,11 +8,20 @@ module.exports = {
       });
     });
   },
-  getAllProducts: () => {
+  getAllProducts: (search, offset, limit, category) => {
+    // if (search === undefined) {
+    //   search = "";
+    // }
+    // if (category === undefined) {
+    //   category = "";
+    // }
     return new Promise((resolve, reject) => {
-      db.query("SELECT * FROM vehicle", (err, res) => {
-        !err ? resolve(res) : reject(new Error(err));
-      });
+      db.query(
+        `SELECT * FROM vehicle WHERE vehicle_name LIKE "%${search}%" AND vehicle_type LIKE "${category}" LIMIT ${limit} OFFSET ${offset} `,
+        (err, res) => {
+          !err ? resolve(res) : reject(new Error(err));
+        }
+      );
     });
   },
   postProducts: (data) => {
@@ -40,10 +49,8 @@ module.exports = {
         )} WHERE id = ${id}`,
         (err, res) => {
           if (!err) {
-            console.log(res);
-            return resolve(res);
+            resolve(res);
           } else {
-            console.log(err);
             reject(new Error(err));
           }
         }
@@ -55,6 +62,16 @@ module.exports = {
       db.query(`DELETE FROM vehicle WHERE id = ${id}`, (err, res) => {
         !err ? resolve(res) : reject(new Error(err));
       });
+    });
+  },
+  getTotalCount: (name) => {
+    return new Promise((resolve, reject) => {
+      db.query(
+        `SELECT COUNT(*) as total FROM vehicle WHERE vehicle_name LIKE "%${name}%"`,
+        (err, res) => {
+          !err ? resolve(res[0].total) : reject(new Error(err));
+        }
+      );
     });
   },
 };
