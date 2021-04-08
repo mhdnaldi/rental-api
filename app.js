@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
+
 const cors = require("cors");
 const corsOption = {
   origin: process.env.port,
@@ -9,6 +10,7 @@ const corsOption = {
 };
 const navigation = require("./src/navigation", cors(corsOption));
 
+app.use(express.static("uploads"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(navigation);

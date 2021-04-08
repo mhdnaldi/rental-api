@@ -7,6 +7,8 @@ const {
   getTotalCount,
 } = require("../models/productsModel");
 
+const fs = require("fs");
+
 module.exports = {
   getProductById: async (req, res) => {
     try {
@@ -31,11 +33,13 @@ module.exports = {
       let offset = limit * (page - 1);
       const result = await getAllProducts(search, offset, limit, category);
       const total = await getTotalCount(search);
+      const total_searching = result.length;
       return res.json({
         success: true,
         message: "SUCCESS GET ALL DATA",
         data: {
           total,
+          total_searching,
           page,
           limit,
           result: result,
@@ -56,7 +60,6 @@ module.exports = {
         vehicle_type,
         rental_price,
         qty,
-        images,
       } = req.body;
       const data = {
         user_id,
@@ -64,7 +67,7 @@ module.exports = {
         vehicle_type,
         rental_price,
         qty,
-        images,
+        images: req.file === undefined ? null : req.file.filename,
         created_at: new Date(),
       };
       const result = await postProducts(data);
@@ -83,8 +86,16 @@ module.exports = {
   updateProducts: async (req, res) => {
     try {
       const { id } = req.params;
-      await updateProducts(req.body, id);
+      let images = req.file.filename === undefined ? null : req.file.filename;
+      let data = { ...req.body, images: images };
+      // console.log(data);
+      await updateProducts(data, id);
       const updatedProduct = await getProductById(id);
+      const img = updatedProduct[0].images;
+      fs.unlink(`uploads/${img}`, (err) => {
+        !err ? console.log("ok") : console.log(err);
+      });
+
       return res.json({
         success: true,
         message: `SUCCESS UPDATE DATA WITH ID: ${id}`,

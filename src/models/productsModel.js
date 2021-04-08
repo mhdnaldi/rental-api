@@ -13,7 +13,6 @@ module.exports = {
     if (category === "All") {
       syntax = "";
     }
-    console.log(category);
     return new Promise((resolve, reject) => {
       db.query(
         `SELECT * FROM vehicle WHERE vehicle_name LIKE "%${search}%"${syntax} LIMIT ${limit} OFFSET ${offset} `,
