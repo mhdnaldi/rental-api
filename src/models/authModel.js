@@ -22,6 +22,7 @@ module.exports = {
       });
     });
   },
+
   registerUser: (data) => {
     const keys = Object.keys(data);
     const values = Object.values(data);
@@ -41,9 +42,7 @@ module.exports = {
     const values = Object.values(data);
     return new Promise((resolve, reject) => {
       db.query(
-        `UPDATE users SET ${keys.map((key) => key)} = ${values.map(
-          (val) => `${val}`
-        )}`,
+        `UPDATE users SET ${keys.map((key, i) => `${key} = "${values[i]}"`)} `,
         (err, res) => {
           !err ? resolve(res) : reject(new Error(err));
         }
