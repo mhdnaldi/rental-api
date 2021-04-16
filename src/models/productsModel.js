@@ -24,17 +24,24 @@ module.exports = {
   },
   postProducts: (data) => {
     return new Promise((resolve, reject) => {
-      db.query(`INSERT INTO vehicle SET ?`, data, (err, res) => {
-        if (!err) {
-          const newResult = {
-            id: res.insertId,
-            ...data,
-          };
-          resolve(newResult);
-        } else {
-          reject(new Error(err));
+      const keys = Object.keys(data);
+      const values = Object.values(data);
+      db.query(
+        `INSERT INTO vehicle (${keys.map((key) => key)}) VALUES (${values.map(
+          (val) => `"${val}"`
+        )})`,
+        (err, res) => {
+          if (!err) {
+            const newResult = {
+              id: res.insertId,
+              ...data,
+            };
+            resolve(newResult);
+          } else {
+            reject(new Error(err));
+          }
         }
-      });
+      );
     });
   },
   updateProducts: (data, id) => {

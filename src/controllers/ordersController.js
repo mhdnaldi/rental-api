@@ -10,7 +10,6 @@ module.exports = {
     try {
       const { id, qty, days } = req.body;
       let orderItem = await getProductById(id);
-      console.log(orderItem);
       let qtyLeft = orderItem[0].qty;
       // CHECK IF ORDER QTY > VEHICLE QTY
       if (qtyLeft - qty < 0) {

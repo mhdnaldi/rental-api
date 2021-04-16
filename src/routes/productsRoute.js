@@ -1,5 +1,6 @@
 const route = require("express").Router();
 const uploadImage = require("../middleware/multer");
+const authorization = require("../middleware/auth");
 const {
   getProductById,
   getAllProducts,
@@ -9,9 +10,9 @@ const {
 } = require("../controllers/productsController");
 
 route.get("/", getAllProducts);
-route.post("/", uploadImage, postProducts);
+route.post("/", authorization, uploadImage, postProducts);
 route.get("/:id", getProductById);
-route.patch("/:id", uploadImage, updateProducts);
-route.delete("/:id", uploadImage, deleteProducts);
+route.patch("/:id", authorization, uploadImage, updateProducts);
+route.delete("/:id", authorization, uploadImage, deleteProducts);
 
 module.exports = route;

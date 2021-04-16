@@ -54,21 +54,9 @@ module.exports = {
   },
   postProducts: async (req, res) => {
     try {
-      const {
-        user_id,
-        vehicle_name,
-        vehicle_type,
-        rental_price,
-        qty,
-      } = req.body;
       const data = {
-        user_id,
-        vehicle_name,
-        vehicle_type,
-        rental_price,
-        qty,
+        ...req.body,
         images: req.file === undefined ? null : req.file.filename,
-        created_at: new Date(),
       };
       const result = await postProducts(data);
       return res.json({
