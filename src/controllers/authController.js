@@ -17,7 +17,9 @@ module.exports = {
     try {
       let { username, email, password, confirm_password } = req.body;
       let checkEmail = await getAllUsers();
+      console.log(req.body);
       checkEmail = checkEmail.map((user) => user.email);
+      console.log(checkEmail);
       if (checkEmail.includes(email)) {
         return res.json({
           success: false,

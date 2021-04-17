@@ -4,12 +4,13 @@ const express = require("express");
 const app = express();
 
 const cors = require("cors");
-const corsOption = {
-  origin: process.env.port,
-  optionSuccessStatus: 200,
-};
-const navigation = require("./src/navigation", cors(corsOption));
+// const corsOption = {
+//   origin: "http://localhost:3001/",
+//   optionSuccessStatus: 200,
+// };
+const navigation = require("./src/navigation");
 
+app.use(cors());
 app.use(express.static("uploads"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
