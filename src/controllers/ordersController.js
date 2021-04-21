@@ -13,7 +13,7 @@ module.exports = {
       let qtyLeft = orderItem[0].qty;
       // CHECK IF ORDER QTY > VEHICLE QTY
       if (qtyLeft - qty < 0) {
-        res.json({
+        res.status(403).json({
           success: false,
           message: `YOU ORDERING ${qty} VEHICLE BUT IT ONLY HAVE ${qtyLeft} VEHICLE LEFT`,
         });
@@ -26,7 +26,7 @@ module.exports = {
           created_at: new Date(),
         };
         const result = await postOrders(data);
-        res.json({
+        res.status(200).json({
           success: true,
           message: "SUCCESS ORDER VEHICLE",
           data: result,
@@ -40,7 +40,7 @@ module.exports = {
         await updateProducts(update, id);
       }
     } catch (err) {
-      res.json({
+      res.status(404).json({
         success: false,
         message: err.message,
       });
@@ -49,13 +49,13 @@ module.exports = {
   getAllOrders: async (req, res) => {
     try {
       const result = await getAllOrders();
-      res.json({
+      res.status(200).json({
         success: true,
         message: "SUCCESS GET ALL ORDERS",
         data: result,
       });
     } catch (err) {
-      res.json({
+      res.status(404).json({
         success: false,
         message: err.message,
       });

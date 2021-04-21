@@ -13,13 +13,13 @@ module.exports = {
   getProductById: async (req, res) => {
     try {
       const result = await getProductById(req.params.id);
-      return res.json({
+      return res.status(200).json({
         success: true,
         message: `SUCCESS GET DATA WITH ID: ${req.params.id}`,
         data: result,
       });
     } catch (err) {
-      return res.json({
+      return res.status(404).json({
         success: false,
         message: err.message,
       });
@@ -34,7 +34,7 @@ module.exports = {
       const result = await getAllProducts(search, offset, limit, category);
       const total = await getTotalCount(search);
       const total_searching = result.length;
-      return res.json({
+      return res.status(200).json({
         success: true,
         message: "SUCCESS GET ALL DATA",
         data: {
@@ -46,7 +46,7 @@ module.exports = {
         },
       });
     } catch (err) {
-      return res.json({
+      return res.status(404).json({
         success: false,
         message: err.message,
       });
@@ -59,13 +59,13 @@ module.exports = {
         images: req.file === undefined ? null : req.file.filename,
       };
       const result = await postProducts(data);
-      return res.json({
+      return res.status(200).json({
         success: true,
         message: "SUCCESS ADD NEW DATA",
         data: result,
       });
     } catch (err) {
-      return res.json({
+      return res.status(404).json({
         success: false,
         message: err.message,
       });
@@ -84,13 +84,13 @@ module.exports = {
         !err ? console.log("ok") : console.log(err);
       });
 
-      return res.json({
+      return res.status(200).json({
         success: true,
         message: `SUCCESS UPDATE DATA WITH ID: ${id}`,
         data: updatedProduct,
       });
     } catch (err) {
-      return res.json({
+      return res.status(404).json({
         success: false,
         message: err.message,
       });
@@ -99,13 +99,13 @@ module.exports = {
   deleteProducts: async (req, res) => {
     try {
       const { id } = req.params;
-      const result = await deleteProducts(id);
-      return res.json({
+      await deleteProducts(id);
+      return res.status(200).json({
         success: true,
         message: "SUCCESS DELETE DATA",
       });
     } catch (err) {
-      return res.json({
+      return res.status(404).json({
         success: false,
         message: err.message,
       });
