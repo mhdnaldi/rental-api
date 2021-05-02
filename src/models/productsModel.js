@@ -10,7 +10,7 @@ module.exports = {
   },
   getAllProducts: (search, offset, limit, category) => {
     let syntax = `AND vehicle_type LIKE "${category}"`;
-    if (category === "All") {
+    if (category === "") {
       syntax = "";
     }
     return new Promise((resolve, reject) => {
